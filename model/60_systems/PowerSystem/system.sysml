@@ -37,6 +37,8 @@ package PowerSystem {
         attribute :>> mass = 0.003 [kg];
         attribute :>> unitCost = 0.35 [EUR];
         port terminal : PowerRailPort;
+        port positive : ElectricalTerminalPort;
+        port negative : ElectricalTerminalPort;
     }
 
     part def TimerReservoirCapacitor :> TantalumCapacitor, CostedPart {
@@ -73,6 +75,10 @@ package PowerSystem {
         part cell : TimerCoinCell;
         part reservoir : TimerReservoirCapacitor;
         bind supply = cell.terminal;
+        interface reservoirAcrossCellPositive : ElectricalTerminalLink
+            connect terminalA ::> cell.positive to terminalB ::> reservoir.positive;
+        interface reservoirAcrossCellNegative : ElectricalTerminalLink
+            connect terminalA ::> cell.negative to terminalB ::> reservoir.negative;
         attribute :>> nominalVoltage = cell.nominalVoltage;
         attribute :>> usableCapacity = cell.usableCapacity;
         attribute :>> usableMilliampereHours = cell.usableMilliampereHours;

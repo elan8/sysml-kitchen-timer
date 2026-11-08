@@ -13,7 +13,7 @@ SPDX-License-Identifier: MIT
 
 A SysML v2 model of a stand-alone, coin-cell kitchen timer. The cook sets a countdown, reads the remaining time, hears completion, and replaces the cell without a tool. The model carries the requirements, the selected design, the baseline calculations, and the engineering documents.
 
-The selected design is a reflective segmented LCD on a CR2032 cell, with no series regulator. On the reference day Spec42 evaluates about 47844 h of life, 37.2 g, and EUR 3.86, and the design checks pass. The longer plan for this repository, including a display trade-off that is not in the model yet, is the [implementation brief](docs/implementation-brief.md).
+The selected design is a reflective segmented LCD on a CR2032 cell, with no series regulator. On the reference day Spec42 evaluates about 47844 h of life, 37.2 g, and EUR 3.97, and the design checks pass. The longer plan for this repository, including a display trade-off that is not in the model yet, is the [implementation brief](docs/implementation-brief.md).
 
 | Question | Where the model answers it |
 | --- | --- |
@@ -34,7 +34,7 @@ The textual model is the source. `Root.sysml` aliases `KitchenTimerSystem::kitch
 | `model/00_context/` | The cook and the timer |
 | `model/10_usecases/` | Set, start, pause, cancel, alarm, dismiss, replace the cell |
 | `model/20_requirements/` | Stakeholder needs |
-| `model/50_library/` | Countdown states, ports, the reference day, the milliampere unit |
+| `model/50_library/` | Ports, the reference day, the milliampere unit |
 | `model/60_systems/00_KitchenTimerSystem/` | System requirements, the selected integration, and `VER-001` |
 | `model/60_systems/UserInterfaceSystem/` | Segmented LCD, four buttons, piezo sounder |
 | `model/60_systems/ControlSystem/` | Microcontroller, 32.768 kHz crystal, board, firmware |
@@ -74,7 +74,7 @@ PDFs are written to `generated/` and are not committed. The script looks for Doc
 
 ## What this baseline leaves open
 
-The model is one selected design, checked by analysis. It does not yet contain display alternatives, a behavioral simulation, schematics, drawings, or firmware source. Alarm loudness is an estimate from a supplier rating, and the part costs are illustrative. Validation with a cook is described in the verification plan and is not a case in the model. Those next steps are set out in the [implementation brief](docs/implementation-brief.md).
+The model is one selected design, checked by analysis. It contains the board netlist (crystal, button pull-ups, piezo transistor) and does not yet contain display alternatives, a SPICE run, drawings, or firmware source. Alarm loudness is an estimate from a supplier rating, and the part costs are illustrative. Validation with a cook is described in the verification plan and is not a case in the model. Those next steps are set out in the [implementation brief](docs/implementation-brief.md).
 
 ## License
 

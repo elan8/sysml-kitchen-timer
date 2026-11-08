@@ -1,7 +1,7 @@
-﻿The table is the set of part definitions that carry a mass and a unit cost. Bought parts are marked in the model with a placeholder manufacturer and an empty supplier URL. The enclosure, the battery door and the printed board are make parts. Four buttons share {{UserInterfaceSystem::TimerButton}}, so the table has one button row and the product uses four.
+﻿The table is the set of part definitions that carry a mass and a unit cost. Bought parts are marked in the model with a placeholder manufacturer and an empty supplier URL. The enclosure, the battery door and the printed board are make parts. Four buttons share {{UserInterfaceSystem::TimerButton}}, the two crystal load capacitors share {{ControlSystem::TimerLoadCapacitor}}, and the four button pull-ups share {{ControlSystem::TimerPullUp}}. The table has one row for each of those definitions.
 
 The cell is a CR2032 primary cell, {{= PowerSystem::TimerCoinCell.nominalMilliampereHours}} mAh nominal, of which the usable fraction {{= PowerSystem::TimerCoinCell.usableCapacityFactor}} leaves {{= PowerSystem::TimerCoinCell.usableMilliampereHours}} mAh. Its nominal voltage is {{= PowerSystem::TimerCoinCell.nominalVoltage}} and the short-pulse limit used by the alarm check is {{= PowerSystem::TimerCoinCell.pulseCurrentLimit}}. It is not a rechargeable pack.
 
 The crystal is {{= ControlSystem::TimerCrystal.resonantFrequency}} at {{= ControlSystem::TimerCrystal.frequencyTolerancePpm}} ppm. The sounder's supplier rating is {{= UserInterfaceSystem::PiezoSounder.ratedSoundPressure}} at {{= UserInterfaceSystem::PiezoSounder.ratedDistance}}. The value used at 0.3 m is an estimate, recorded on the sounder.
 
-Costs and masses in the table are the part values. The product roll-up, which counts four buttons, is in the analyses below.
+Costs and masses in the table are the part values. The product roll-up counts four buttons, two load capacitors and four pull-ups, and is in the analyses below.

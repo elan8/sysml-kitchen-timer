@@ -3,7 +3,7 @@ The selected baseline is a reflective four-digit segmented LCD on a CR2032 cell,
 Four subsystems make the product:
 
 - the user interface: the display, four buttons and a piezo sounder;
-- control: a low-power microcontroller, a 32.768 kHz crystal, the printed board and the firmware;
+- control: a low-power microcontroller, a 32.768 kHz crystal, the printed board, the passives and transistor on that board, and a Rust task on an Embassy runtime;
 - power: the cell and a reservoir capacitor across it;
 - the mechanical assembly: the enclosure, the cell holder and the battery door.
 

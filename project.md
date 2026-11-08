@@ -20,7 +20,7 @@ regulator. The reference day is two countdowns, each with 20 s of setting, 8
 min of running and 8 s of alarm. Mode currents are whole-timer exclusive modes.
 Readability means legible at 0.5 m under about 100 lux without a backlight.
 Alarm loudness is specified at 0.3 m. On that baseline Spec42 evaluates about
-47844 h of life (176 mAh at 0.00368 mA), 37.2 g and EUR 3.86, and the
+47844 h of life (176 mAh at 0.00368 mA), 37.2 g and EUR 3.97, and the
 selected-design checks pass. Display alternatives and behavioral simulation
 are not part of this baseline.
 

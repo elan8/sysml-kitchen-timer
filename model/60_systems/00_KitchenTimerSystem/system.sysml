@@ -6,6 +6,8 @@ package KitchenTimerSystem {
     private import SI::*;
     private import Elan8::Core::*;
     private import Elan8::Mechanical::Interconnection::*;
+    private import Elan8::Electronics::Assembly::*;
+    private import Elan8::Electronics::Interconnection::*;
     private import Elan8::Units::Money::*;
     private import KitchenTimerLibrary::*;
     private import UserInterfaceSystem::*;
@@ -32,7 +34,7 @@ package KitchenTimerSystem {
         }
         doc /*
          * Start, pause, resume and cancel are the StartStopPressed and
-         * CancelPressed transitions of CountdownStates. Source: STK-005.
+         * CancelPressed transitions of the firmware countdown. Source: STK-005.
          */
     }
 
@@ -152,7 +154,7 @@ package KitchenTimerSystem {
         attribute height : LengthValue;
         attribute batteryReplaceableWithoutTools : Boolean;
         attribute componentCost : MonetaryAmount;
-        exhibit state observableCountdown : CountdownStates;
+        exhibit state observableCountdown;
     }
 
     part def BaselineModeCurrents {
@@ -189,8 +191,10 @@ package KitchenTimerSystem {
         flow userInterface.buttonOut.pressed to control.buttonIn.pressed;
         flow control.displayOut.image to userInterface.displayIn.image;
 
+        exhibit state observableCountdown
+                :>> KitchenTimerSpecification::observableCountdown
+                references control.countdown;
         bind observableCountdown = control.countdown;
-        allocate observableCountdown to control;
     }
 
     part def KitchenTimerIntegration
@@ -230,9 +234,88 @@ package KitchenTimerSystem {
             userInterface.componentCost + control.componentCost
             + power.componentCost + mechanical.componentCost;
 
+        interface cellPositiveToBoard : ElectricalTerminalLink
+            connect terminalA ::> power.cell.positive to terminalB ::> control.vcc;
+        interface cellNegativeToBoard : ElectricalTerminalLink
+            connect terminalA ::> power.cell.negative to terminalB ::> control.gnd;
+        interface sounderToRail : ElectricalTerminalLink
+            connect terminalA ::> userInterface.sounder.positive to terminalB ::> control.vcc;
+        interface sounderToCollector : ElectricalTerminalLink
+            connect terminalA ::> userInterface.sounder.negative to terminalB ::> control.alarmSwitch;
+        interface incrementHigh : ElectricalTerminalLink
+            connect terminalA ::> userInterface.incrementButton.contactHigh
+            to terminalB ::> control.incrementSense;
+        interface incrementLow : ElectricalTerminalLink
+            connect terminalA ::> userInterface.incrementButton.contactLow
+            to terminalB ::> control.gnd;
+        interface decrementHigh : ElectricalTerminalLink
+            connect terminalA ::> userInterface.decrementButton.contactHigh
+            to terminalB ::> control.decrementSense;
+        interface decrementLow : ElectricalTerminalLink
+            connect terminalA ::> userInterface.decrementButton.contactLow
+            to terminalB ::> control.gnd;
+        interface startStopHigh : ElectricalTerminalLink
+            connect terminalA ::> userInterface.startStopButton.contactHigh
+            to terminalB ::> control.startStopSense;
+        interface startStopLow : ElectricalTerminalLink
+            connect terminalA ::> userInterface.startStopButton.contactLow
+            to terminalB ::> control.gnd;
+        interface cancelHigh : ElectricalTerminalLink
+            connect terminalA ::> userInterface.cancelButton.contactHigh
+            to terminalB ::> control.cancelSense;
+        interface cancelLow : ElectricalTerminalLink
+            connect terminalA ::> userInterface.cancelButton.contactLow
+            to terminalB ::> control.gnd;
+        connect userInterface.incrementButton.signal to control.incrementGpio;
+        connect userInterface.decrementButton.signal to control.decrementGpio;
+        connect userInterface.startStopButton.signal to control.startStopGpio;
+        connect userInterface.cancelButton.signal to control.cancelGpio;
+
         connection boardMount : MechanicalMount
             connect support ::> mechanical.enclosure
-            to mountedPart ::> control.board;
+            to mountedPart ::> control.printedBoard;
+        connection displayOnBoard : BoardMounting {
+            attribute :>> referenceDesignator = new ReferenceDesignator("LCD1");
+            attribute :>> side = BoardSide::top;
+            attribute :>> mountingTechnology = MountingTechnology::throughHole;
+            connect board ::> control.printedBoard to component ::> userInterface.display;
+        }
+        connection sounderOnBoard : BoardMounting {
+            attribute :>> referenceDesignator = new ReferenceDesignator("LS1");
+            attribute :>> side = BoardSide::top;
+            attribute :>> mountingTechnology = MountingTechnology::throughHole;
+            connect board ::> control.printedBoard to component ::> userInterface.sounder;
+        }
+        connection reservoirOnBoard : BoardMounting {
+            attribute :>> referenceDesignator = new ReferenceDesignator("C4");
+            attribute :>> side = BoardSide::top;
+            attribute :>> mountingTechnology = MountingTechnology::surfaceMount;
+            connect board ::> control.printedBoard to component ::> power.reservoir;
+        }
+        connection incrementOnBoard : BoardMounting {
+            attribute :>> referenceDesignator = new ReferenceDesignator("SW1");
+            attribute :>> side = BoardSide::top;
+            attribute :>> mountingTechnology = MountingTechnology::throughHole;
+            connect board ::> control.printedBoard to component ::> userInterface.incrementButton;
+        }
+        connection decrementOnBoard : BoardMounting {
+            attribute :>> referenceDesignator = new ReferenceDesignator("SW2");
+            attribute :>> side = BoardSide::top;
+            attribute :>> mountingTechnology = MountingTechnology::throughHole;
+            connect board ::> control.printedBoard to component ::> userInterface.decrementButton;
+        }
+        connection startStopOnBoard : BoardMounting {
+            attribute :>> referenceDesignator = new ReferenceDesignator("SW3");
+            attribute :>> side = BoardSide::top;
+            attribute :>> mountingTechnology = MountingTechnology::throughHole;
+            connect board ::> control.printedBoard to component ::> userInterface.startStopButton;
+        }
+        connection cancelOnBoard : BoardMounting {
+            attribute :>> referenceDesignator = new ReferenceDesignator("SW4");
+            attribute :>> side = BoardSide::top;
+            attribute :>> mountingTechnology = MountingTechnology::throughHole;
+            connect board ::> control.printedBoard to component ::> userInterface.cancelButton;
+        }
         connection cellRetention : RemovableMount
             connect support ::> mechanical.cellHolder
             to mountedPart ::> power.cell;
@@ -314,7 +397,7 @@ package KitchenTimerSystem {
     package Views {
         view specification : Elan8::SystemsEngineering::SpecificationView {
             expose KitchenTimerSystem::KitchenTimerSpecification;
-            expose KitchenTimerLibrary::CountdownStates;
+            expose ControlSystem::TimerFirmware::countdown;
         }
         view architecture : Elan8::SystemsEngineering::ArchitectureView {
             expose KitchenTimerSystem::KitchenTimerArchitecture;

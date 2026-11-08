@@ -271,10 +271,11 @@ package KitchenTimerDocuments {
                  * The design described here is the single selected baseline: a reflective
                  * segmented LCD, a coin cell with no regulator, and a molded enclosure.
                  * It covers the countdown behaviour, the four subsystems, the firmware
-                 * allocation and the parts that determine cost, mass and life.
+                 * allocation, the board netlist and the parts that determine cost,
+                 * mass and life.
                  *
-                 * Circuit schematics, mechanical drawings, source code and display
-                 * alternatives are outside this document.
+                 * A laid-out schematic drawing, mechanical drawings, source code and
+                 * display alternatives are outside this document.
                  */
             }
             view conventions {
@@ -302,7 +303,7 @@ package KitchenTimerDocuments {
                  * running, paused and alarming. The alarming state is the completion
                  * notification.
                  */
-                expose KitchenTimerLibrary::CountdownStates;
+                expose ControlSystem::TimerFirmware::countdown;
             }
         }
 
@@ -324,7 +325,11 @@ package KitchenTimerDocuments {
             }
             view control : InterconnectionView {
                 @Section { title = "Control"; }
-                doc /* Microcontroller, watch crystal, printed board and firmware platform. */
+                doc /*
+                 * Printed board with the microcontroller, crystal, passives and
+                 * the sounder transistor mounted on it. The Embassy runtime and
+                 * its Rust task are on the microcontroller.
+                 */
                 expose KitchenTimerSystem::kitchenTimer::control;
             }
             view power : InterconnectionView {
@@ -342,6 +347,17 @@ package KitchenTimerDocuments {
         view firmwareArchitecture {
             @Section { title = "Firmware architecture"; }
             @Prose { file = "prose/sds-firmware.md"; }
+            view deployment : GeneralView {
+                @Section { title = "Firmware deployment"; }
+                doc /*
+                 * The countdown machine is exhibited by the firmware task.
+                 * That task is allocated to the Embassy runtime, and the
+                 * runtime is allocated to the microcontroller.
+                 */
+                filter @SysML::PartUsage or @SysML::AllocationUsage
+                    or @SysML::StateUsage or @SysML::ExhibitStateUsage;
+                expose KitchenTimerSystem::kitchenTimer::control::mcu;
+            }
         }
 
         view billOfMaterials {
@@ -351,13 +367,18 @@ package KitchenTimerDocuments {
                 columns = "Part = name, Mass = .mass, Unit cost = .unitCost";
                 kind = "part def";
                 sort = "name";
-                caption = "Part definitions that carry a mass and a unit cost. Four buttons are one definition, used four times.";
+                caption = "Part definitions that carry a mass and a unit cost. Four buttons are one definition, used four times. The crystal load capacitor and the button pull-up are each one definition, used twice and four times.";
             }
             expose UserInterfaceSystem::SegmentedLcd;
             expose UserInterfaceSystem::TimerButton;
             expose UserInterfaceSystem::PiezoSounder;
             expose ControlSystem::TimerMicrocontroller;
             expose ControlSystem::TimerCrystal;
+            expose ControlSystem::TimerLoadCapacitor;
+            expose ControlSystem::TimerDecouplingCapacitor;
+            expose ControlSystem::TimerPullUp;
+            expose ControlSystem::TimerBaseResistor;
+            expose ControlSystem::TimerSounderDriver;
             expose ControlSystem::TimerPrintedCircuitBoard;
             expose PowerSystem::TimerCoinCell;
             expose PowerSystem::TimerReservoirCapacitor;

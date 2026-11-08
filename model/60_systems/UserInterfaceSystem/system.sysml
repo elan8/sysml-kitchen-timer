@@ -34,7 +34,11 @@ package UserInterfaceSystem {
     }
 
     part def TimerButton :> Elan8::Electronics::Sensing::SwitchSensor, CostedPart {
-        doc /* Momentary contact. Firmware debounces the edge. */
+        doc /*
+         * Momentary contact, mounted on the printed board. contactHigh is the
+         * sense net, pulled up on the board and read by a microcontroller pin.
+         * contactLow is ground. The firmware debounces the edge.
+         */
         @BuyPart {
             manufacturer = "illustrative";
             manufacturerPartNumber = "SW-TACT-6MM";
@@ -42,6 +46,8 @@ package UserInterfaceSystem {
         }
         attribute :>> mass = 0.0004 [kg];
         attribute :>> unitCost = 0.06 [EUR];
+        port contactHigh : ElectricalTerminalPort;
+        port contactLow : ElectricalTerminalPort;
     }
 
     part def PiezoSounder :> ElectronicsComponent, CostedPart {
@@ -63,6 +69,8 @@ package UserInterfaceSystem {
         attribute :>> unitCost = 0.30 [EUR];
         port power : ~PowerRailPort;
         port drive : ~PwmPort;
+        port positive : ElectricalTerminalPort;
+        port negative : ElectricalTerminalPort;
     }
 
     part def UserInterfaceSpecification :> PhysicalComponent, Elan8::SystemsEngineering::SystemSpecification {
@@ -105,9 +113,12 @@ package UserInterfaceSystem {
             display.unitCost + incrementButton.unitCost + decrementButton.unitCost
             + startStopButton.unitCost + cancelButton.unitCost + sounder.unitCost;
         doc /*
-         * The four switches are decoded by the firmware into ButtonEvent values
-         * on buttonOut. The cook's port receives that same command and is shown
-         * the display image. Pin mapping is not assigned in this baseline.
+         * The four switches are mounted on the control board. Each switch
+         * sits between ground and a pulled-up sense pin. The firmware decodes
+         * those pins into ButtonEvent values on buttonOut. The sounder's
+         * positive terminal is the cell rail and its negative terminal is the
+         * collector of the control transistor. drive carries the same PWM
+         * command the firmware writes to that transistor's base.
          */
     }
 
