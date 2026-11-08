@@ -9,6 +9,7 @@ package UserInterfaceSystem {
     private import Elan8::Electronics::Interconnection::*;
     private import Elan8::Procurement::*;
     private import Elan8::Units::Money::*;
+    private import Elan8::PhysicalModeling::*;
     private import KitchenTimerLibrary::*;
 
     part def SegmentedLcd :> ElectronicsComponent, CostedPart {
@@ -48,6 +49,10 @@ package UserInterfaceSystem {
         attribute :>> unitCost = 0.06 [EUR];
         port contactHigh : ElectricalTerminalPort;
         port contactLow : ElectricalTerminalPort;
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Ideal.IdealClosingSwitch";
+        }
     }
 
     part def PiezoSounder :> ElectronicsComponent, CostedPart {

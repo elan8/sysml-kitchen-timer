@@ -11,6 +11,7 @@ package PowerSystem {
     private import Elan8::Procurement::*;
     private import Elan8::Units::Engineering::*;
     private import Elan8::Units::Money::*;
+    private import Elan8::PhysicalModeling::*;
     private import KitchenTimerLibrary::milliampere;
 
     part def TimerCoinCell :> ElectronicsComponent, CostedPart {
@@ -39,6 +40,10 @@ package PowerSystem {
         port terminal : PowerRailPort;
         port positive : ElectricalTerminalPort;
         port negative : ElectricalTerminalPort;
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Batteries.BatteryStacks.Cell";
+        }
     }
 
     part def TimerReservoirCapacitor :> TantalumCapacitor, CostedPart {
@@ -58,6 +63,10 @@ package PowerSystem {
         attribute :>> packageType = new ComponentPackage("case A");
         attribute :>> mass = 0.0002 [kg];
         attribute :>> unitCost = 0.04 [EUR];
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Basic.Capacitor";
+        }
     }
 
     part def PowerSpecification :> PhysicalComponent, Elan8::SystemsEngineering::SystemSpecification {

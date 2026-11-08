@@ -21,8 +21,10 @@ min of running and 8 s of alarm. Mode currents are whole-timer exclusive modes.
 Readability means legible at 0.5 m under about 100 lux without a backlight.
 Alarm loudness is specified at 0.3 m. On that baseline Spec42 evaluates about
 47844 h of life (176 mAh at 0.00368 mA), 37.2 g and EUR 3.97, and the
-selected-design checks pass. Display alternatives and behavioral simulation
-are not part of this baseline.
+selected-design checks pass. Display alternatives are not part of this
+baseline. Resistors, capacitors, ground, the NPN, the buttons, and the cell
+are linked to Modelica Standard Library classes. The crystal, the piezo, the
+microcontroller, and the firmware have no standard-library counterpart.
 
 The customer requirements specification (KT-CRS-001), system requirements
 specification (KT-SRS-001), system design specification (KT-SDS-001) and

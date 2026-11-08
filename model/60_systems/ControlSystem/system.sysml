@@ -15,6 +15,7 @@ package ControlSystem {
     private import Elan8::Software::*;
     private import Elan8::Units::Engineering::*;
     private import Elan8::Units::Money::*;
+    private import Elan8::PhysicalModeling::*;
     private import KitchenTimerLibrary::*;
 
     part def TimerMicrocontroller :> Microcontroller, CostedPart {
@@ -84,6 +85,10 @@ package ControlSystem {
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000001 [kg];
         attribute :>> unitCost = 0.01 [EUR];
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Basic.Capacitor";
+        }
     }
 
     part def TimerDecouplingCapacitor :> CeramicCapacitor, CostedPart {
@@ -99,6 +104,10 @@ package ControlSystem {
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000002 [kg];
         attribute :>> unitCost = 0.01 [EUR];
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Basic.Capacitor";
+        }
     }
 
     part def TimerPullUp :> Resistor, CostedPart {
@@ -118,6 +127,10 @@ package ControlSystem {
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000001 [kg];
         attribute :>> unitCost = 0.01 [EUR];
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Basic.Resistor";
+        }
     }
 
     part def TimerBaseResistor :> Resistor, CostedPart {
@@ -138,6 +151,10 @@ package ControlSystem {
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000001 [kg];
         attribute :>> unitCost = 0.01 [EUR];
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Basic.Resistor";
+        }
     }
 
     part def TimerSounderDriver :> BipolarJunctionTransistor, CostedPart {
@@ -159,6 +176,10 @@ package ControlSystem {
         attribute toneFrequency : FrequencyValue = 4000 [Hz];
         attribute :>> mass = 0.00001 [kg];
         attribute :>> unitCost = 0.03 [EUR];
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Semiconductors.NPN";
+        }
     }
 
     part def TimerPrintedCircuitBoard :> PrintedCircuitBoard, CostedPart {
@@ -171,6 +192,15 @@ package ControlSystem {
         attribute :>> height = 45 [mm];
         attribute :>> mass = 0.008 [kg];
         attribute :>> unitCost = 0.45 [EUR];
+    }
+
+    part def TimerGround :> Ground {
+        doc /* Reference node of the driver circuit. */
+        @ModelicaModel {
+            resourceUri = "modelica://Modelica";
+            className = "Modelica.Electrical.Analog.Basic.Ground";
+        }
+        attribute :>> mass = 0 [kg];
     }
 
     part def TimerRuntime :> ExecutionPlatform {
@@ -344,9 +374,7 @@ package ControlSystem {
         part cancelPullUp : TimerPullUp;
         part baseResistor : TimerBaseResistor;
         part sounderDriver : TimerSounderDriver;
-        part ground : Ground {
-            attribute :>> mass = 0 [kg];
-        }
+        part ground : TimerGround;
 
         bind buttonIn = mcu.buttonIn;
         bind displayOut = mcu.displayOut;
