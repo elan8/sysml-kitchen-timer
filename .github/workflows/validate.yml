@@ -1,0 +1,107 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
+name: Validate and document
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  SPEC42_VERSION: "0.60.1"
+  # The document vocabulary (Elan8::Documents) Doc42 reads, pinned to an exact commit.
+  DOMAIN_LIBRARIES_REF: 146fe5ca70e76d8692e96f4a666e974592c40abc
+
+jobs:
+  validate:
+    name: Spec42 and Doc42
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Spec42
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/spec42"
+          gh release download "v$SPEC42_VERSION" --repo elan8/spec42 \
+            --pattern "spec42-$SPEC42_VERSION-linux-x64.tar.gz" --dir "$RUNNER_TEMP/spec42"
+          tar -xzf "$RUNNER_TEMP/spec42/spec42-$SPEC42_VERSION-linux-x64.tar.gz" -C "$RUNNER_TEMP/spec42"
+          echo "$RUNNER_TEMP/spec42" >> "$GITHUB_PATH"
+
+      # Any error fails, and any warning except the accepted ones in the script.
+      - name: Validate model
+        run: python3 scripts/validate.py
+
+      - name: Checkout Elan8 domain libraries
+        uses: actions/checkout@v4
+        with:
+          repository: elan8/sysml-domain-libraries
+          ref: ${{ env.DOMAIN_LIBRARIES_REF }}
+          path: .libraries/sysml-domain-libraries
+
+      # The four engineering documents: CRS, SRS, SDS and VVP.
+      - name: Install Doc42
+        uses: elan8/doc42-release@v0.6.0
+
+      - name: Check documents
+        run: doc42 check model --workspace-root . --library-path .libraries/sysml-domain-libraries/model
+
+      # The license secret is not available to pull requests from forks.
+      - name: Build documents
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          ELAN8_LICENSE: ${{ secrets.ELAN8_LICENSE }}
+        run: |
+          doc42 build model --workspace-root . \
+            --library-path .libraries/sysml-domain-libraries/model \
+            --all --out generated/documents --json > "$RUNNER_TEMP/documents.json"
+
+      - name: Upload documents
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: documents
+          path: generated/documents/*.pdf
+          if-no-files-found: error
+
+      # On main, the documents are also published to GitHub Pages with an index page,
+      # at https://elan8.github.io/sysml-kitchen-timer/.
+      - name: Write documents index
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          python3 scripts/build-documents-index.py "$RUNNER_TEMP/documents.json" \
+            --out generated/documents \
+            --repository "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" --commit "$GITHUB_SHA" \
+            --doc42 "$(doc42 --version)"
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: generated/documents
+
+  pages:
+    name: Publish documents
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

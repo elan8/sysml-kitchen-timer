@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![SysML v2](https://img.shields.io/badge/SysML-v2-0f8fa8.svg)](https://www.omg.org/spec/SysML/)
-[![Spec42](https://img.shields.io/badge/validated%20with-Spec42%200.59.2-0f8fa8.svg)](https://github.com/elan8/spec42/releases/tag/v0.59.2)
+[![Spec42](https://img.shields.io/badge/validated%20with-Spec42%200.60.1-0f8fa8.svg)](https://github.com/elan8/spec42/releases/tag/v0.60.1)
 
 ![A small white kitchen timer on a counter, its reflective display reading 05:00](docs/assets/kitchen-timer-hero.jpg)
 
@@ -45,10 +45,11 @@ The textual model is the source. `Root.sysml` aliases `KitchenTimerSystem::kitch
 
 ## Check the model
 
-Validation uses the Spec42 **0.59.2** release. That release bundles the SysML v2 standard library **2026-04** and the Elan8 domain libraries **0.5.0**. No extra library path is required.
+Validation uses the Spec42 **0.60.1** release. That release bundles the SysML v2 standard library **2026-04** and the Elan8 domain libraries **0.5.0**. No extra library path is required.
 
 ```powershell
 spec42 check model --workspace-root .
+python scripts/validate.py   # the same check, failing on errors and unexpected warnings, as CI runs it
 ```
 
 The check reports `view_type_non_standard` for the Elan8 context, specification, architecture, and integration views. Those views resolve. The warning says their definitions are not in the standard view table. Details and the baseline assumptions are in [`project.md`](project.md).
@@ -71,6 +72,10 @@ From the repository root, with [Doc42](https://github.com/elan8/doc42) available
 ```
 
 PDFs are written to `generated/` and are not committed. The script looks for Doc42 at `DOC42`, or at `../doc42/target/debug/doc42.exe`, and passes `../sysml-domain-libraries/model` so the document metadata resolves. A debug build can mint a seven-day development license when `ELAN8_LICENSE` is unset. A release build needs a real license. See [`model/80_documents/README.md`](model/80_documents/README.md).
+
+## Continuous integration
+
+[`.github/workflows/validate.yml`](.github/workflows/validate.yml) runs on every push and pull request. It validates the model with `scripts/validate.py` and Spec42 **0.60.1**, checks the four documents with Doc42 **0.6.0**, and builds them with the `ELAN8_LICENSE` repository secret. The PDFs are kept as the `documents` artifact of each run. On `main` they are also published to GitHub Pages with an index page, at <https://elan8.github.io/sysml-kitchen-timer/>.
 
 ## What this baseline leaves open
 
