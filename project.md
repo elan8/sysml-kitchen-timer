@@ -5,8 +5,8 @@ shared library, and flat systems. Recursive composition is by part usage.
 `Root.sysml` aliases the selected occurrence `KitchenTimerSystem::kitchenTimer`
 as `systemOfInterest`.
 
-Validation uses the Spec42 **0.59.2** release binary
-(`https://github.com/elan8/spec42/releases/tag/v0.59.2`). That release bundles
+Validation uses the Spec42 **0.60.1** release binary
+(`https://github.com/elan8/spec42/releases/tag/v0.60.1`). That release bundles
 the SysML v2 standard library **2026-04** and Elan8 domain libraries **0.5.0**.
 No extra library path is required. Do not also point Spec42 at a second copy of
 the domain libraries.
@@ -38,7 +38,7 @@ build of Doc42 at `../doc42/target/debug/doc42.exe` is the default executable;
 set `DOC42` to override it. When `ELAN8_LICENSE` is unset, the script mints a
 seven-day development license. A release build needs a real license. Doc42 is
 given `../sysml-domain-libraries/model` so the document metadata resolves.
-Spec42 keeps using the copy bundled in the 0.59.2 release.
+Spec42 keeps using the copy bundled in the 0.60.1 release.
 
 `spec42 check` reports `view_type_non_standard` for the Elan8 context,
 specification, architecture and integration views. Those views resolve; the
