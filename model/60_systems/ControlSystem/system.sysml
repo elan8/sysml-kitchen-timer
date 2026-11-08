@@ -43,7 +43,7 @@ package ControlSystem {
         }
         attribute :>> resonantFrequency = 32768 [Hz];
         attribute :>> loadCapacitance = 0.0000000000125 [F];
-        attribute :>> packageType = "2012";
+        attribute :>> packageType = new ComponentPackage("2012");
         attribute frequencyTolerancePpm : Real = 20.0;
         attribute :>> mass = 0.0001 [kg];
         attribute :>> unitCost = 0.08 [EUR];
@@ -51,9 +51,9 @@ package ControlSystem {
 
     part def TimerPrintedCircuitBoard :> PrintedCircuitBoard, CostedPart {
         @MakePart;
-        attribute :>> layerCount = 2;
+        attribute :>> layerCount = new LayerCount(2);
         attribute :>> technology = PrintedBoardTechnology::rigid;
-        attribute :>> material = "FR-4";
+        attribute :>> material = new BoardMaterial("FR-4");
         attribute :>> thickness = 1.6 [mm];
         attribute :>> width = 60 [mm];
         attribute :>> height = 45 [mm];

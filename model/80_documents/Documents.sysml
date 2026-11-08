@@ -320,22 +320,22 @@ package KitchenTimerDocuments {
             view userInterface : InterconnectionView {
                 @Section { title = "User interface"; }
                 doc /* Display, four buttons and the sounder. */
-                expose KitchenTimerSystem::kitchenTimer.userInterface;
+                expose KitchenTimerSystem::kitchenTimer::userInterface;
             }
             view control : InterconnectionView {
                 @Section { title = "Control"; }
                 doc /* Microcontroller, watch crystal, printed board and firmware platform. */
-                expose KitchenTimerSystem::kitchenTimer.control;
+                expose KitchenTimerSystem::kitchenTimer::control;
             }
             view power : InterconnectionView {
                 @Section { title = "Power"; }
                 doc /* Coin cell and reservoir capacitor, with no series regulator. */
-                expose KitchenTimerSystem::kitchenTimer.power;
+                expose KitchenTimerSystem::kitchenTimer::power;
             }
             view mechanical : InterconnectionView {
                 @Section { title = "Mechanical assembly"; }
                 doc /* Enclosure, cell holder and battery door. */
-                expose KitchenTimerSystem::kitchenTimer.mechanical;
+                expose KitchenTimerSystem::kitchenTimer::mechanical;
             }
         }
 

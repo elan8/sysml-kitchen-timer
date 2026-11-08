@@ -51,9 +51,9 @@ package PowerSystem {
             url = "";
         }
         attribute :>> capacitance = 0.0001 [F];
-        attribute :>> tolerance = 0.2;
+        attribute :>> tolerance = new ComponentTolerance(0.2);
         attribute :>> ratedVoltage = 6.3 [V];
-        attribute :>> packageType = "case A";
+        attribute :>> packageType = new ComponentPackage("case A");
         attribute :>> mass = 0.0002 [kg];
         attribute :>> unitCost = 0.04 [EUR];
     }

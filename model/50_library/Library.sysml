@@ -91,7 +91,7 @@ package KitchenTimerLibrary {
 
         transition increment first idle accept IncrementPressed then idle;
         transition decrement first idle accept DecrementPressed then idle;
-        transition start first idle accept StartStopPressed then running;
+        transition startCountdown first idle accept StartStopPressed then running;
         transition pause first running accept StartStopPressed then paused;
         transition resume first paused accept StartStopPressed then running;
         transition complete first running accept CountdownElapsed then alarming;
