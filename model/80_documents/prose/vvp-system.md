@@ -1,0 +1,3 @@
+The article of the baseline analysis is {{KitchenTimerSystem::kitchenTimer}}, the selected integration. Its subject is the system specification, with the integration's values bound in: life, pulse current, crystal tolerance, readability, loudness, envelope, mass, cost and tool-free cell replacement.
+
+The diagram is that occurrence. Later laboratory verification, when a unit exists, uses the same occurrence as the configuration record: the same parts, the same reference day and the same mode currents. A unit built to a different display or a different cell is a different configuration and is not covered by VER-001.

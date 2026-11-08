@@ -1,0 +1,13 @@
+﻿The reference day, {{KitchenTimerLibrary::TypicalKitchenDay}}, is an assumption. It is {{= KitchenTimerLibrary::TypicalKitchenDay.countdownsPerDay}} countdowns, each with {{= KitchenTimerLibrary::TypicalKitchenDay.settingSecondsEach}} s of setting, {{= KitchenTimerLibrary::TypicalKitchenDay.runningSecondsEach}} s of running and {{= KitchenTimerLibrary::TypicalKitchenDay.alarmSecondsEach}} s of alarm, in a day of {{= KitchenTimerLibrary::TypicalKitchenDay.periodSeconds}} s. Idle is the rest. The day fractions are those second counts divided by the period.
+
+The four exclusive-mode currents of the whole timer are {{= KitchenTimerSystem::BaselineModeCurrents.idleCurrent}} idle, {{= KitchenTimerSystem::BaselineModeCurrents.settingCurrent}} setting, {{= KitchenTimerSystem::BaselineModeCurrents.runningCurrent}} running and {{= KitchenTimerSystem::BaselineModeCurrents.alarmCurrent}} alarm. They are not added to the parts' own power draws. The average on the selected design is {{= KitchenTimerSystem::KitchenTimerIntegration.averageCurrent}}.
+
+Operating life is the usable milliampere-hours divided by that average, then read as hours: {{= KitchenTimerSystem::KitchenTimerIntegration.operatingLife}}. The requirement is at least 17520 h. The alarm current is also compared with the cell's pulse limit, because the average hides a short loud pulse.
+
+The selected envelope is {{= KitchenTimerSystem::KitchenTimerIntegration.width}} by {{= KitchenTimerSystem::KitchenTimerIntegration.depth}} by {{= KitchenTimerSystem::KitchenTimerIntegration.height}}, against 90 mm by 70 mm by 25 mm. Mass is {{= KitchenTimerSystem::KitchenTimerIntegration.mass}}, against 0.1 kg. Illustrative component cost is {{= KitchenTimerSystem::KitchenTimerIntegration.componentCost}}, against 8 EUR, and it includes one cell.
+
+Timing error is the crystal tolerance, {{= KitchenTimerSystem::KitchenTimerIntegration.timebaseTolerancePpm}} ppm, against 277.8 ppm. The sound pressure used for loudness is {{= KitchenTimerSystem::KitchenTimerIntegration.soundPressureAt300mm}}, against 70 dB. That sound pressure is the hand estimate on the sounder: 85 dB at 0.1 m, a point-source loss to 0.3 m, and 3 dB for the enclosure. It is not a measurement. A candidate of 75 dB at 1 m was not adopted, because a coin-cell piezo does not support it.
+
+Readability is the display's own claim: legible at {{= UserInterfaceSystem::SegmentedLcd.viewingDistance}} without a backlight. The integration assert checks that claim. It does not measure contrast.
+
+Every one of those checks is an assert on {{KitchenTimerSystem::KitchenTimerIntegration}}. KT-VVP-001 is the case that collects them.
