@@ -63,8 +63,9 @@ package ControlSystem {
 
     part def TimerFirmware :> EventDrivenTask {
         doc /*
-         * Bare-metal countdown allocated to the MCU. While running it wakes
-         * once per second. Button edges closer than 50 ms are treated as one
+         * Bare-metal countdown allocated to the MCU. The running state's
+         * counting action waits one second between steps, which is this
+         * task's deadline. Button edges closer than 50 ms are treated as one
          * press. The exhibited state machine is the control contract's machine.
          */
         attribute :>> deadline = 1 [s];
