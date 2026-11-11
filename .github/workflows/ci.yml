@@ -1,0 +1,118 @@
+# SPDX-FileCopyrightText: 2026 Elan8
+# SPDX-License-Identifier: MIT
+name: Model and documents
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: model-and-documents-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate with Spec42
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out the model
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      # This release bundles the standard and domain libraries. Do not add a
+      # second domain-library checkout to Spec42's workspace.
+      - name: Validate the complete model
+        uses: elan8/spec42@0148baa0b3e09142fd661384cf5291d80e53983c # v0.60.2
+        with:
+          version: v0.60.2
+          path: model
+          workspace-root: .
+          format: sarif
+          upload-sarif: 'false'
+          warnings-as-errors: 'false'
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: spec42-validation
+          path: spec42.sarif
+          if-no-files-found: warn
+          retention-days: 30
+
+  documents:
+    name: Check and build documents with Doc42
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out the model
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Check out the document vocabulary
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: elan8/sysml-domain-libraries
+          ref: 146fe5ca70e76d8692e96f4a666e974592c40abc
+          path: .libraries/sysml-domain-libraries
+          persist-credentials: false
+
+      - name: Install Doc42
+        uses: elan8/doc42-release@v0.7.0
+        with:
+          version: '0.7.0'
+
+      - name: Validate document definitions
+        shell: pwsh
+        run: ./scripts/generate-documents.ps1 -LibraryPath .libraries/sysml-domain-libraries/model -CheckOnly
+
+      - name: Build all four PDFs
+        id: build
+        if: >-
+          github.actor != 'dependabot[bot]' &&
+          (github.event_name != 'pull_request' ||
+          github.event.pull_request.head.repo.full_name == github.repository)
+        shell: pwsh
+        env:
+          ELAN8_TOKEN: ${{ secrets.ELAN8_TOKEN }}
+        run: |
+          if (-not $env:ELAN8_TOKEN) {
+            throw 'Set the ELAN8_TOKEN repository secret to an Elan8 API token with Doc42 access.'
+          }
+          ./scripts/generate-documents.ps1 -LibraryPath .libraries/sysml-domain-libraries/model
+
+      - name: Explain validation-only pull requests
+        if: github.event_name == 'pull_request' && (github.event.pull_request.head.repo.full_name != github.repository || github.actor == 'dependabot[bot]')
+        run: echo 'Document definitions were checked. PDF generation is skipped because this pull request cannot receive ELAN8_TOKEN.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload document check report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: doc42-validation
+          path: generated/doc42-check.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload engineering documents
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: kitchen-timer-documents
+          path: |
+            generated/KT-CRS-001.pdf
+            generated/KT-SRS-001.pdf
+            generated/KT-SDS-001.pdf
+            generated/KT-VVP-001.pdf
+            generated/documents.json
+          if-no-files-found: error
+          retention-days: 30

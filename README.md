@@ -7,7 +7,8 @@ SPDX-License-Identifier: MIT
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![SysML v2](https://img.shields.io/badge/SysML-v2-0f8fa8.svg)](https://www.omg.org/spec/SysML/)
-[![Spec42](https://img.shields.io/badge/validated%20with-Spec42%200.59.2-0f8fa8.svg)](https://github.com/elan8/spec42/releases/tag/v0.59.2)
+[![Model and documents](https://github.com/elan8/sysml-kitchen-timer/actions/workflows/ci.yml/badge.svg)](https://github.com/elan8/sysml-kitchen-timer/actions/workflows/ci.yml)
+[![Spec42](https://img.shields.io/badge/validated%20with-Spec42%200.60.2-0f8fa8.svg)](https://github.com/elan8/spec42/releases/tag/v0.60.2)
 
 ![A small white kitchen timer on a counter, its reflective display reading 05:00](docs/assets/kitchen-timer-hero.jpg)
 
@@ -45,13 +46,21 @@ The textual model is the source. `Root.sysml` aliases `KitchenTimerSystem::kitch
 
 ## Check the model
 
-Validation uses the Spec42 **0.59.2** release. That release bundles the SysML v2 standard library **2026-04** and the Elan8 domain libraries **0.5.0**. No extra library path is required.
+Validation uses the Spec42 **0.60.2** release. That release bundles the SysML v2 standard library **2026-04** and the Elan8 domain libraries **0.5.0**. No extra library path is required.
 
 ```powershell
 spec42 check model --workspace-root .
 ```
 
-The check reports `view_type_non_standard` for the Elan8 context, specification, architecture, and integration views. Those views resolve. The warning says their definitions are not in the standard view table. Details and the baseline assumptions are in [`project.md`](project.md).
+The model validates without errors or warnings with the pinned release. Details and the baseline assumptions are in [`project.md`](project.md).
+
+## Continuous integration
+
+[Model and documents](https://github.com/elan8/sysml-kitchen-timer/actions/workflows/ci.yml) runs on pushes to `main`, pull requests, and manual dispatch. Spec42 checks the complete model and uploads its SARIF report as `spec42-validation`. Doc42 **0.7.0** checks every document definition with a pinned domain-library revision, then builds all four PDFs.
+
+Download `kitchen-timer-documents` from a successful run's **Artifacts** section for the PDFs and document manifest. The `doc42-validation` artifact contains the document check report. Artifacts are retained for 30 days.
+
+PDF generation uses the existing **ELAN8_TOKEN** repository secret, passed only to the build step. The token must have Doc42 access. Fork and Dependabot pull requests run model and document validation without the secret; their PDF build is skipped.
 
 ## Engineering documents
 
@@ -64,13 +73,15 @@ Four documents are views in [`model/80_documents/Documents.sysml`](model/80_docu
 | System Design Specification | KT-SDS-001 | How is the selected timer built? |
 | Verification and Validation Plan | KT-VVP-001 | How is the baseline checked? |
 
-From the repository root, with [Doc42](https://github.com/elan8/doc42) available:
+From the repository root, with [Doc42 0.7.0](https://github.com/elan8/doc42-release/releases/tag/v0.7.0) installed and the compatible domain libraries available:
 
 ```powershell
 .\scripts\generate-documents.ps1
+# Or pass the pinned vocabulary checkout explicitly:
+.\scripts\generate-documents.ps1 -LibraryPath path/to/sysml-domain-libraries/model
 ```
 
-PDFs are written to `generated/` and are not committed. The script looks for Doc42 at `DOC42`, or at `../doc42/target/debug/doc42.exe`, and passes `../sysml-domain-libraries/model` so the document metadata resolves. A debug build can mint a seven-day development license when `ELAN8_LICENSE` is unset. A release build needs a real license. See [`model/80_documents/README.md`](model/80_documents/README.md).
+PDFs and JSON reports are written to `generated/` and are not committed. The script uses `DOC42`, then `doc42` on PATH, then the sibling debug build. Set `ELAN8_TOKEN` or sign in locally with `doc42 login`; the retired `ELAN8_LICENSE` variable is no longer used. `-CheckOnly` validates definitions without authentication or PDF generation. See [`model/80_documents/README.md`](model/80_documents/README.md).
 
 ## What this baseline leaves open
 

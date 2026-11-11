@@ -5,8 +5,8 @@ shared library, and flat systems. Recursive composition is by part usage.
 `Root.sysml` aliases the selected occurrence `KitchenTimerSystem::kitchenTimer`
 as `systemOfInterest`.
 
-Validation uses the Spec42 **0.59.2** release binary
-(`https://github.com/elan8/spec42/releases/tag/v0.59.2`). That release bundles
+Validation uses the Spec42 **0.60.2** release binary
+(`https://github.com/elan8/spec42/releases/tag/v0.60.2`). That release bundles
 the SysML v2 standard library **2026-04** and Elan8 domain libraries **0.5.0**.
 No extra library path is required. Do not also point Spec42 at a second copy of
 the domain libraries.
@@ -33,13 +33,13 @@ verification and validation plan (KT-VVP-001) are views in
 .\scripts\generate-documents.ps1
 ```
 
-That script runs Doc42. PDFs go to `generated/` and are not committed. A debug
-build of Doc42 at `../doc42/target/debug/doc42.exe` is the default executable;
-set `DOC42` to override it. When `ELAN8_LICENSE` is unset, the script mints a
-seven-day development license. A release build needs a real license. Doc42 is
-given `../sysml-domain-libraries/model` so the document metadata resolves.
-Spec42 keeps using the copy bundled in the 0.59.2 release.
+That script runs Doc42 **0.7.0**. PDFs, the document manifest and check report go
+to `generated/` and are not committed. Install Doc42 on PATH or set `DOC42` to
+its executable. Set `ELAN8_TOKEN` or use `doc42 login` for local builds. Use
+`-CheckOnly` to validate documents without authentication. The library path
+defaults to `../sysml-domain-libraries/model`; override it with `-LibraryPath`.
+CI pins that vocabulary to `146fe5ca70e76d8692e96f4a666e974592c40abc`, the
+revision used for the Doc42 release samples. Spec42 uses its bundled libraries.
 
-`spec42 check` reports `view_type_non_standard` for the Elan8 context,
-specification, architecture and integration views. Those views resolve; the
-warning says their definitions are not in the standard view table.
+`spec42 check` reports no errors or warnings with the pinned release. The
+custom Elan8 views resolve through their specialization of standard views.
