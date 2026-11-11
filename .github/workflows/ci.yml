@@ -22,16 +22,15 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Check out the model
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       # This release bundles the standard and domain libraries. Do not add a
       # second domain-library checkout to Spec42's workspace.
       - name: Validate the complete model
-        uses: elan8/spec42@0148baa0b3e09142fd661384cf5291d80e53983c # v0.60.2
+        uses: elan8/spec42@v0.60.2
         with:
-          version: v0.60.2
           path: model
           workspace-root: .
           format: sarif
@@ -40,7 +39,7 @@ jobs:
 
       - name: Upload validation report
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@v6
         timeout-minutes: 5
         with:
           name: spec42-validation
@@ -55,12 +54,12 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out the model
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: Check out the document vocabulary
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        uses: actions/checkout@v6
         with:
           repository: elan8/sysml-domain-libraries
           ref: 146fe5ca70e76d8692e96f4a666e974592c40abc
@@ -69,8 +68,6 @@ jobs:
 
       - name: Install Doc42
         uses: elan8/doc42-release@v0.7.0
-        with:
-          version: '0.7.0'
 
       - name: Validate document definitions
         shell: pwsh
@@ -97,7 +94,7 @@ jobs:
 
       - name: Upload document check report
         if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@v6
         timeout-minutes: 5
         with:
           name: doc42-validation
@@ -107,7 +104,7 @@ jobs:
 
       - name: Upload engineering documents
         if: steps.build.outcome == 'success'
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        uses: actions/upload-artifact@v6
         timeout-minutes: 5
         with:
           name: kitchen-timer-documents
