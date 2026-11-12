@@ -15,6 +15,6 @@ From the repository root:
 .\scripts\generate-documents.ps1
 ```
 
-The script looks for Doc42 at `DOC42`, or at `../doc42/target/debug/doc42.exe`. It passes `../sysml-domain-libraries/model` as the library path. PDFs are named from the document number and written to `generated/`, which is gitignored.
+The script uses Doc42 **0.7.0** from `DOC42`, PATH, or `../doc42/target/debug/doc42.exe`. It defaults to `../sysml-domain-libraries/model`; use `-LibraryPath` for another checkout. CI pins the vocabulary to `146fe5ca70e76d8692e96f4a666e974592c40abc`. PDFs are named from the document number and written to `generated/`, which is gitignored, alongside `doc42-check.json` and `documents.json`.
 
-A debug build of Doc42 can mint a seven-day development license when `ELAN8_LICENSE` is unset. A release build needs a real license. Spec42 still checks the model on its own, with the libraries bundled in the 0.59.2 release. Do not point that check at a second copy of the domain libraries.
+Run `doc42 login` locally, or set `ELAN8_TOKEN`, to build PDFs. `-CheckOnly` checks every document definition without a token. CI uses the existing `ELAN8_TOKEN` secret for trusted runs and uploads the four PDFs plus manifest as `kitchen-timer-documents`; fork and Dependabot pull requests validate without generation. Spec42 checks the model separately with the libraries bundled in **0.60.2**. Do not point that check at a second copy of the domain libraries.
