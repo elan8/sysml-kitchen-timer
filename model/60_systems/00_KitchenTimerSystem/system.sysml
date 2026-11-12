@@ -173,6 +173,33 @@ package KitchenTimerSystem {
         attribute settingCurrent : ElectricCurrentValue = settingMilliampere * 1 [mA];
         attribute runningCurrent : ElectricCurrentValue = runningMilliampere * 1 [mA];
         attribute alarmCurrent : ElectricCurrentValue = alarmMilliampere * 1 [mA];
+
+        doc /*
+         * The countdown mode selects one of these loads. Setting is not a
+         * countdown mode; it stays a fraction of TypicalKitchenDay. Paused
+         * has no authored current: time spent paused fails the run.
+         */
+        part whileIdle : ModeLoad {
+            attribute :>> mode = TimerMode::idle;
+            attribute :>> current = idleCurrent;
+        }
+        part whileRunning : ModeLoad {
+            attribute :>> mode = TimerMode::running;
+            attribute :>> current = runningCurrent;
+        }
+        part whileAlarming : ModeLoad {
+            attribute :>> mode = TimerMode::alarming;
+            attribute :>> current = alarmCurrent;
+        }
+    }
+
+    part def ModeLoad {
+        doc /*
+         * One countdown mode and the cell current drawn while that mode is
+         * current. The current is a whole-timer average, not a pin current.
+         */
+        attribute mode : TimerMode;
+        attribute current : ElectricCurrentValue;
     }
 
     part def KitchenTimerArchitecture
@@ -397,8 +424,10 @@ package KitchenTimerSystem {
             doc /*
              * Increment three times, start, and wait 180 s. The case passes
              * when the firmware countdown is alarming and drives the sounder.
+             * The cell current is the baseline load for the countdown mode.
              */
             subject firmware : TimerFirmware;
+            part loads : BaselineModeCurrents;
             objective {
                 verify completionAlarm;
             }

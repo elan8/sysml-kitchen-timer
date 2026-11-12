@@ -1,0 +1,14 @@
+[
+  {
+    "case_name": "KitchenTimerSystem::Verification::completionAlarmTest",
+    "verdict": "pass",
+    "detail": null,
+    "requirements": [
+      "KitchenTimerSystem::completionAlarm"
+    ],
+    "time": "180 [s]",
+    "state": "alarming",
+    "charge": "1.44 [mA*s]",
+    "unlicensed_development_build": true
+  }
+]

@@ -493,12 +493,14 @@ package KitchenTimerDocuments {
                 @Section { title = "Verification cases"; }
                 doc /*
                  * The case states its method, what is evaluated, and the criterion for
-                 * passing. The last column lists the requirements the case verifies.
+                 * passing. The verdict columns are the file `run42 verify` writes. A case
+                 * with no record is not a pass.
                  */
                 @Table {
-                    columns = "ID = id, Case = name, Method = @VerificationMethod.kind, Procedure and pass criterion = text, Verifies = verifies / id";
+                    columns = "ID = id, Case = name, Method = @VerificationMethod.kind, Procedure and pass criterion = text, Verifies = verifies / id, Verdict = verdict, Time = verdict-time, State = verdict-state, Charge = verdict-charge";
                     kind = "verification case";
                     sort = "id";
+                    verdicts = "verdicts.json";
                 }
                 expose KitchenTimerSystem::Verification::baselineAnalysis;
                 expose KitchenTimerSystem::Verification::completionAlarmTest;
