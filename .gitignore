@@ -3,3 +3,4 @@
 
 # Rendered Doc42 PDFs. Regenerate with scripts/generate-documents.ps1.
 /generated/
+/input/

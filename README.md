@@ -74,7 +74,7 @@ PDFs are written to `generated/` and are not committed. The script looks for Doc
 
 ## What this baseline leaves open
 
-The model is one selected design, checked by analysis. It contains the board netlist (crystal, button pull-ups, piezo transistor). Where a part has a Modelica Standard Library counterpart, `@ModelicaModel` names that class; this repository does not contain a generated or hand-written Modelica model. The model does not yet contain display alternatives, a SPICE run, drawings, or firmware source. Alarm loudness is an estimate from a supplier rating, and the part costs are illustrative. Validation with a cook is described in the verification plan and is not a case in the model. Those next steps are set out in the [implementation brief](docs/implementation-brief.md).
+The model is one selected design, checked by analysis. It contains the board netlist (crystal, button pull-ups, piezo transistor). `@ModelicaModel` names the class Run42 simulates: domain-library passives, and `Elan8.KitchenTimer` for the cell, the button, and the sounder transistor. This repository does not contain the Modelica text. The model does not yet contain display alternatives, a SPICE run, drawings, or firmware source. Alarm loudness is an estimate from a supplier rating, and the part costs are illustrative. Validation with a cook is described in the verification plan and is not a case in the model. Those next steps are set out in the [implementation brief](docs/implementation-brief.md).
 
 ## License
 

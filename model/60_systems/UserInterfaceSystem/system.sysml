@@ -39,6 +39,10 @@ package UserInterfaceSystem {
          * Momentary contact, mounted on the printed board. contactHigh is the
          * sense net, pulled up on the board and read by a microcontroller pin.
          * contactLow is ground. The firmware debounces the edge.
+         * The Modelica model is Elan8.KitchenTimer.ClosingSwitch. An input
+         * named closed is 1 when the contact is closed and 0 when it is open.
+         * Closed resistance and open conductance are the MSL IdealClosingSwitch
+         * values, 1e-5 ohm and 1e-5 S.
          */
         @BuyPart {
             manufacturer = "illustrative";
@@ -50,8 +54,8 @@ package UserInterfaceSystem {
         port contactHigh : ElectricalTerminalPort;
         port contactLow : ElectricalTerminalPort;
         @ModelicaModel {
-            resourceUri = "modelica://Modelica";
-            className = "Modelica.Electrical.Analog.Ideal.IdealClosingSwitch";
+            resourceUri = "modelica://Elan8";
+            className = "Elan8.KitchenTimer.ClosingSwitch";
         }
     }
 

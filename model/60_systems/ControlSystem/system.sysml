@@ -72,89 +72,89 @@ package ControlSystem {
          * Pierce load capacitor, one on each crystal pin. Two 18 pF parts
          * in series are 9 pF; the crystal's 12.5 pF load treats the rest
          * as board stray. The value is a design selection, not an extracted
-         * parasitic.
+         * parasitic. The Modelica binding is Capacitor's.
          */
         @BuyPart {
             manufacturer = "illustrative";
             manufacturerPartNumber = "C-18PF-50V";
             url = "";
         }
-        attribute :>> capacitance = 0.000000000018 [F];
+        attribute :>> capacitance = 0.000000000018 [F] {
+            @ExternalVariable {
+                variableName = "capacitance";
+            }
+        }
         attribute :>> tolerance = new ComponentTolerance(0.05);
         attribute :>> ratedVoltage = 50 [V];
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000001 [kg];
         attribute :>> unitCost = 0.01 [EUR];
-        @ModelicaModel {
-            resourceUri = "modelica://Modelica";
-            className = "Modelica.Electrical.Analog.Basic.Capacitor";
-        }
     }
 
     part def TimerDecouplingCapacitor :> CeramicCapacitor, CostedPart {
-        doc /* 100 nF across the microcontroller supply pins. */
+        doc /* 100 nF across the microcontroller supply pins. The Modelica binding is Capacitor's. */
         @BuyPart {
             manufacturer = "illustrative";
             manufacturerPartNumber = "C-100NF-16V";
             url = "";
         }
-        attribute :>> capacitance = 0.0000001 [F];
+        attribute :>> capacitance = 0.0000001 [F] {
+            @ExternalVariable {
+                variableName = "capacitance";
+            }
+        }
         attribute :>> tolerance = new ComponentTolerance(0.1);
         attribute :>> ratedVoltage = 16 [V];
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000002 [kg];
         attribute :>> unitCost = 0.01 [EUR];
-        @ModelicaModel {
-            resourceUri = "modelica://Modelica";
-            className = "Modelica.Electrical.Analog.Basic.Capacitor";
-        }
     }
 
     part def TimerPullUp :> Resistor, CostedPart {
         doc /*
          * Button pull-up to the cell rail. 100 kΩ keeps a held button
-         * inside the setting-mode current.
+         * inside the setting-mode current. The Modelica binding is Resistor's.
          */
         @BuyPart {
             manufacturer = "illustrative";
             manufacturerPartNumber = "R-100K-0402";
             url = "";
         }
-        attribute :>> resistance = 100000 [ohm];
+        attribute :>> resistance = 100000 [ohm] {
+            @ExternalVariable {
+                variableName = "resistance";
+            }
+        }
         attribute :>> tolerance = new ComponentTolerance(0.05);
         attribute :>> ratedPower = 0.063 [W];
         attribute :>> maximumWorkingVoltage = 50 [V];
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000001 [kg];
         attribute :>> unitCost = 0.01 [EUR];
-        @ModelicaModel {
-            resourceUri = "modelica://Modelica";
-            className = "Modelica.Electrical.Analog.Basic.Resistor";
-        }
     }
 
     part def TimerBaseResistor :> Resistor, CostedPart {
         doc /*
          * Base resistor of the sounder transistor. At 3 V it supplies about
          * 50 µA, enough for the 3 mA piezo without adding a new term to the
-         * alarm-current budget.
+         * alarm-current budget. The Modelica binding is Resistor's.
          */
         @BuyPart {
             manufacturer = "illustrative";
             manufacturerPartNumber = "R-47K-0402";
             url = "";
         }
-        attribute :>> resistance = 47000 [ohm];
+        attribute :>> resistance = 47000 [ohm] {
+            @ExternalVariable {
+                variableName = "resistance";
+            }
+        }
         attribute :>> tolerance = new ComponentTolerance(0.05);
         attribute :>> ratedPower = 0.063 [W];
         attribute :>> maximumWorkingVoltage = 50 [V];
         attribute :>> packageType = new ComponentPackage("0402");
         attribute :>> mass = 0.000001 [kg];
         attribute :>> unitCost = 0.01 [EUR];
-        @ModelicaModel {
-            resourceUri = "modelica://Modelica";
-            className = "Modelica.Electrical.Analog.Basic.Resistor";
-        }
     }
 
     part def TimerSounderDriver :> BipolarJunctionTransistor, CostedPart {
@@ -162,6 +162,9 @@ package ControlSystem {
          * NPN switch. The PWM pin drives the base through the base resistor.
          * The emitter is ground. The collector sinks the piezo; the piezo's
          * other terminal is the cell rail. The tone is 4 kHz.
+         * The Modelica model is Elan8.KitchenTimer.Npn, an MSL NPN whose
+         * forward gain is currentGain. The other MSL parameters stay at
+         * that library's defaults. This part is npn.
          */
         @BuyPart {
             manufacturer = "illustrative";
@@ -169,7 +172,11 @@ package ControlSystem {
             url = "";
         }
         attribute :>> polarity = BipolarJunctionPolarity::npn;
-        attribute :>> currentGain = 200.0;
+        attribute :>> currentGain = 200.0 {
+            @ExternalVariable {
+                variableName = "currentGain";
+            }
+        }
         attribute :>> maximumCollectorEmitterVoltage = 40 [V];
         attribute :>> maximumCollectorCurrent = 0.1 [A];
         attribute :>> packageType = new ComponentPackage("SOT-23");
@@ -177,8 +184,8 @@ package ControlSystem {
         attribute :>> mass = 0.00001 [kg];
         attribute :>> unitCost = 0.03 [EUR];
         @ModelicaModel {
-            resourceUri = "modelica://Modelica";
-            className = "Modelica.Electrical.Analog.Semiconductors.NPN";
+            resourceUri = "modelica://Elan8";
+            className = "Elan8.KitchenTimer.Npn";
         }
     }
 
@@ -195,11 +202,7 @@ package ControlSystem {
     }
 
     part def TimerGround :> Ground {
-        doc /* Reference node of the driver circuit. */
-        @ModelicaModel {
-            resourceUri = "modelica://Modelica";
-            className = "Modelica.Electrical.Analog.Basic.Ground";
-        }
+        doc /* Reference node of the driver circuit. The binding is Ground's, pin terminal. */
         attribute :>> mass = 0 [kg];
     }
 
