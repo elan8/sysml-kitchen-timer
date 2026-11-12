@@ -1,4 +1,4 @@
-VER-001 needs the model, Spec42 0.59.2, and the domain libraries that release bundles. It needs no chamber, meter, fixture or prototype. The command and the evaluated headline results are recorded in `project.md`.
+VER-001 needs the model, Spec42 0.60.2, and the domain libraries that release bundles. It needs no chamber, meter, fixture or prototype. The command and the evaluated headline results are recorded in `project.md`.
 
 A later measurement campaign, not yet planned as cases, would need:
 

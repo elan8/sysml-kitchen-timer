@@ -13,4 +13,4 @@ The structure of the set follows these guides, tailored to a product of this siz
 - NASA/SP-2016-6105 Rev 2, *NASA Systems Engineering Handbook*, for the verification and validation plan and the requirements verification matrix.
 - INCOSE, *Systems Engineering Handbook*, fifth edition, and INCOSE, *Guide to Writing Requirements*, for the separation of needs, requirements, design and verification.
 
-The model is checked with Spec42 0.59.2. The documents are rendered with Doc42 from `model/80_documents`.
+The model is checked with Spec42 0.60.2. The documents are rendered with Doc42 from `model/80_documents`.
