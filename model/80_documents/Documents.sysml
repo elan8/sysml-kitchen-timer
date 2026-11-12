@@ -486,8 +486,8 @@ package KitchenTimerDocuments {
         view systemVerification {
             @Section { title = "System verification"; }
             doc /*
-             * One verification case covers the twelve system requirements. It is an
-             * analysis of the selected design in the model.
+             * The analysis case covers the twelve system requirements. The
+             * completion-alarm test runs the firmware countdown.
              */
             view cases {
                 @Section { title = "Verification cases"; }
@@ -501,6 +501,7 @@ package KitchenTimerDocuments {
                     sort = "id";
                 }
                 expose KitchenTimerSystem::Verification::baselineAnalysis;
+                expose KitchenTimerSystem::Verification::completionAlarmTest;
             }
             view matrix {
                 @Section { title = "Requirements verification matrix"; }

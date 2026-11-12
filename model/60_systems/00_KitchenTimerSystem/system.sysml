@@ -392,6 +392,27 @@ package KitchenTimerSystem {
              * supplier-rating estimate.
              */
         }
+        verification <'VER-002'> completionAlarmTest {
+            @VerificationMethod { kind = VerificationMethodKind::test; }
+            doc /*
+             * Increment three times, start, and wait 180 s. The case passes
+             * when the firmware countdown is alarming and drives the sounder.
+             */
+            subject firmware : TimerFirmware;
+            objective {
+                verify completionAlarm;
+            }
+            action stimulus {
+                send new IncrementPressed() to firmware;
+                then send new IncrementPressed() to firmware;
+                then send new IncrementPressed() to firmware;
+                then send new StartStopPressed() to firmware;
+                then accept after 180 [s];
+            }
+            assert constraint alarmsAndDrives {
+                firmware.countdown.mode == TimerMode::alarming and firmware.countdown.sounderDriven
+            }
+        }
     }
 
     package Views {
