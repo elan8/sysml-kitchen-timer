@@ -67,7 +67,7 @@ jobs:
           persist-credentials: false
 
       - name: Install Doc42
-        uses: elan8/doc42-release@v0.7.0
+        uses: elan8/doc42-release@v0.8.0
 
       - name: Validate document definitions
         shell: pwsh

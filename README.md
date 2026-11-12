@@ -56,7 +56,7 @@ The model validates without errors or warnings with the pinned release. Details 
 
 ## Continuous integration
 
-[Model and documents](https://github.com/elan8/sysml-kitchen-timer/actions/workflows/ci.yml) runs on pushes to `main`, pull requests, and manual dispatch. Spec42 checks the complete model and uploads its SARIF report as `spec42-validation`. Doc42 **0.7.0** checks every document definition with a pinned domain-library revision, then builds all four PDFs.
+[Model and documents](https://github.com/elan8/sysml-kitchen-timer/actions/workflows/ci.yml) runs on pushes to `main`, pull requests, and manual dispatch. Spec42 checks the complete model and uploads its SARIF report as `spec42-validation`. Doc42 **0.8.0** checks every document definition with a pinned domain-library revision, then builds all four PDFs.
 
 Download `kitchen-timer-documents` from a successful run's **Artifacts** section for the PDFs and document manifest. The `doc42-validation` artifact contains the document check report. Artifacts are retained for 30 days.
 
@@ -73,7 +73,7 @@ Four documents are views in [`model/80_documents/Documents.sysml`](model/80_docu
 | System Design Specification | KT-SDS-001 | How is the selected timer built? |
 | Verification and Validation Plan | KT-VVP-001 | How is the baseline checked? |
 
-From the repository root, with [Doc42 0.7.0](https://github.com/elan8/doc42-release/releases/tag/v0.7.0) installed and the compatible domain libraries available:
+From the repository root, with [Doc42 0.8.0](https://github.com/elan8/doc42-release/releases/tag/v0.8.0) installed and the compatible domain libraries available:
 
 ```powershell
 .\scripts\generate-documents.ps1
