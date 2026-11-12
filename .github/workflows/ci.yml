@@ -62,12 +62,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: elan8/sysml-domain-libraries
-          ref: 146fe5ca70e76d8692e96f4a666e974592c40abc
+          ref: 4c73195b2f64176696b2e0f4d72606bfd044dcef
           path: .libraries/sysml-domain-libraries
           persist-credentials: false
 
       - name: Install Doc42
-        uses: elan8/doc42-release@v0.7.0
+        uses: elan8/doc42-release@v0.8.0
 
       - name: Validate document definitions
         shell: pwsh

@@ -3,7 +3,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Check or build the kitchen-timer CRS, SRS, SDS and VVP with Doc42 0.7.0.
+    Check or build the kitchen-timer CRS, SRS, SDS and VVP with Doc42 0.8.0.
 
 .DESCRIPTION
     Runs from anywhere. Uses DOC42, doc42 on PATH, or the sibling debug build.
@@ -28,7 +28,7 @@ if (-not $doc42) {
     }
 }
 if (-not (Test-Path -LiteralPath $doc42)) {
-    throw 'Install Doc42 0.7.0 on PATH or set DOC42 to its executable.'
+    throw 'Install Doc42 0.8.0 on PATH or set DOC42 to its executable.'
 }
 
 if (-not (Test-Path -LiteralPath $LibraryPath)) {

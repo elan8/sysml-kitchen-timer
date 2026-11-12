@@ -33,12 +33,12 @@ verification and validation plan (KT-VVP-001) are views in
 .\scripts\generate-documents.ps1
 ```
 
-That script runs Doc42 **0.7.0**. PDFs, the document manifest and check report go
+That script runs Doc42 **0.8.0**. PDFs, the document manifest and check report go
 to `generated/` and are not committed. Install Doc42 on PATH or set `DOC42` to
 its executable. Set `ELAN8_TOKEN` or use `doc42 login` for local builds. Use
 `-CheckOnly` to validate documents without authentication. The library path
 defaults to `../sysml-domain-libraries/model`; override it with `-LibraryPath`.
-CI pins that vocabulary to `146fe5ca70e76d8692e96f4a666e974592c40abc`, the
+CI pins that vocabulary to `4c73195b2f64176696b2e0f4d72606bfd044dcef`, the
 revision used for the Doc42 release samples. Spec42 uses its bundled libraries.
 
 `spec42 check` reports no errors or warnings with the pinned release. The
